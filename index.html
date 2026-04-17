@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concepcion's Tailor Shop — Expert Alterations in Los Angeles</title>
+    <meta name="description" content="Professional tailoring and alterations in Los Angeles 90001. Expert craftsmanship, affordable prices. Call (323) 587-5499.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #c9a84c;
+            --gold-light: #e8d5a0;
+            --navy: #1a1f3a;
+            --navy-light: #2a3050;
+            --cream: #faf8f2;
+            --charcoal: #2c2c2c;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--charcoal);
+            background: var(--cream);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            background: rgba(26, 31, 58, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .nav-brand {
+            font-family: 'Playfair Display', serif;
+            color: var(--gold);
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a {
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover { color: var(--gold); }
+
+        .hamburger {
+            display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none;
+        }
+        .hamburger span { width: 25px; height: 2px; background: var(--gold); transition: 0.3s; }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+            display: flex; align-items: center; justify-content: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+        .hero-content { position: relative; z-index: 1; max-width: 700px; }
+        .hero-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            color: var(--white);
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+        }
+        .hero h1 span { color: var(--gold); }
+        .hero .tagline {
+            color: var(--gold-light);
+            font-size: 1.1rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+        .hero p {
+            color: rgba(255,255,255,0.7);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        .btn-gold {
+            background: var(--gold);
+            color: var(--navy);
+        }
+        .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); }
+        .btn-outline {
+            border: 1.5px solid var(--gold);
+            color: var(--gold);
+            margin-left: 1rem;
+        }
+        .btn-outline:hover { background: var(--gold); color: var(--navy); }
+
+        /* Section Styles */
+        section { padding: 5rem 2rem; }
+        .section-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+        }
+        .section-header p {
+            color: #666;
+            font-size: 1rem;
+        }
+        .divider {
+            width: 60px;
+            height: 3px;
+            background: var(--gold);
+            margin: 1rem auto;
+        }
+
+        /* Services */
+        .services { background: var(--white); }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .service-card {
+            background: var(--cream);
+            padding: 2.5rem 2rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(201, 168, 76, 0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(26, 31, 58, 0.08);
+        }
+        .service-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+        .service-card h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--navy);
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+        }
+        .service-card p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .service-price {
+            display: inline-block;
+            margin-top: 1rem;
+            color: var(--gold);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        /* Why Us */
+        .why-us {
+            background: var(--navy);
+            color: var(--white);
+        }
+        .why-us .section-header h2 { color: var(--white); }
+        .why-us .section-header p { color: rgba(255,255,255,0.6); }
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .why-item {
+            text-align: center;
+            padding: 2rem 1.5rem;
+        }
+        .why-item .num {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--gold);
+            font-weight: 700;
+        }
+        .why-item h3 {
+            margin: 0.75rem 0 0.5rem;
+            font-size: 1.1rem;
+        }
+        .why-item p {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Process */
+        .process-steps {
+            display: flex;
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .step {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            padding: 1.5rem;
+            position: relative;
+        }
+        .step-num {
+            width: 50px; height: 50px;
+            background: var(--gold);
+            color: var(--navy);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0 auto 1rem;
+        }
+        .step h3 { color: var(--navy); font-size: 1rem; margin-bottom: 0.5rem; }
+        .step p { color: #666; font-size: 0.85rem; line-height: 1.5; }
+
+        /* Contact / CTA */
+        .contact {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+            text-align: center;
+            color: var(--white);
+        }
+        .contact h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+        }
+        .contact p {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+        }
+        .contact-item {
+            text-align: center;
+        }
+        .contact-item .label {
+            color: var(--gold);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.3rem;
+        }
+        .contact-item .value {
+            color: var(--white);
+            font-size: 1.1rem;
+        }
+        .contact-item a { color: var(--white); text-decoration: none; }
+        .contact-item a:hover { color: var(--gold); }
+
+        /* Map */
+        .map-container {
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid rgba(201, 168, 76, 0.3);
+        }
+        .map-container iframe {
+            width: 100%;
+            height: 300px;
+            border: none;
+        }
+
+        /* Footer */
+        footer {
+            background: #111;
+            color: rgba(255,255,255,0.5);
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
+            .nav-links.active {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0; right: 0;
+                background: var(--navy);
+                padding: 1.5rem 2rem;
+                gap: 1rem;
+            }
+            .hero h1 { font-size: 2.4rem; }
+            .btn-outline { margin-left: 0; margin-top: 1rem; }
+            .hero .btn { display: block; width: 100%; text-align: center; }
+            .contact-info { gap: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-brand">CONCEPCION'S</div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#services">Services</a></li>
+            <li><a href="#why-us">Why Us</a></li>
+            <li><a href="#process">How It Works</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('active')" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-icon">✂️</div>
+            <p class="tagline">Expert Tailoring Since Day One</p>
+            <h1>Concepcion's <span>Tailor Shop</span></h1>
+            <p>Professional alterations and custom tailoring in the heart of Los Angeles. We bring precision, care, and decades of craftsmanship to every stitch.</p>
+            <a href="tel:3235875499" class="btn btn-gold">Call (323) 587-5499</a>
+            <a href="#services" class="btn btn-outline">View Services</a>
+        </div>
+    </section>
+
+    <section class="services" id="services">
+        <div class="section-header">
+            <h2>Our Services</h2>
+            <div class="divider"></div>
+            <p>Quality craftsmanship for every garment</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">👔</div>
+                <h3>Suit Alterations</h3>
+                <p>Expert tailoring for jackets, pants, and complete suits. Get that perfect custom fit.</p>
+                <span class="service-price">Starting at $25</span>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">👗</div>
+                <h3>Dress Alterations</h3>
+                <p>Hemming, taking in, letting out, and restyling dresses for any occasion.</p>
+                <span class="service-price">Starting at $20</span>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">👖</div>
+                <h3>Pants & Jeans</h3>
+                <p>Hemming, tapering, waist adjustments, and zipper repairs for all types of pants.</p>
+                <span class="service-price">Starting at $12</span>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🪡</div>
+                <h3>Repairs & Patches</h3>
+                <p>Torn seams, missing buttons, broken zippers — we'll make it like new again.</p>
+                <span class="service-price">Starting at $8</span>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">👰</div>
+                <h3>Wedding & Formal</h3>
+                <p>Bridal gowns, bridesmaid dresses, and formal wear altered with the utmost care.</p>
+                <span class="service-price">Starting at $50</span>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">📐</div>
+                <h3>Custom Fitting</h3>
+                <p>Full measurement and fitting sessions for a truly personalized garment experience.</p>
+                <span class="service-price">By consultation</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="why-us" id="why-us">
+        <div class="section-header">
+            <h2>Why Choose Concepcion's</h2>
+            <div class="divider"></div>
+            <p>Trusted by the community for quality and care</p>
+        </div>
+        <div class="why-grid">
+            <div class="why-item">
+                <div class="num">✦</div>
+                <h3>Expert Craftsmanship</h3>
+                <p>Years of experience in fine tailoring and detailed alterations work.</p>
+            </div>
+            <div class="why-item">
+                <div class="num">✦</div>
+                <h3>Affordable Prices</h3>
+                <p>Quality tailoring at honest, competitive prices for every budget.</p>
+            </div>
+            <div class="why-item">
+                <div class="num">✦</div>
+                <h3>Quick Turnaround</h3>
+                <p>Most alterations completed within 3–5 business days. Rush service available.</p>
+            </div>
+            <div class="why-item">
+                <div class="num">✦</div>
+                <h3>Satisfaction Guaranteed</h3>
+                <p>We don't stop until you're completely happy with the fit.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="process">
+        <div class="section-header">
+            <h2>How It Works</h2>
+            <div class="divider"></div>
+            <p>Simple, straightforward tailoring process</p>
+        </div>
+        <div class="process-steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <h3>Bring It In</h3>
+                <p>Walk in or call ahead with your garment and tell us what you need.</p>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <h3>Get Measured</h3>
+                <p>We'll measure you and discuss the best approach for your alterations.</p>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <h3>We Tailor</h3>
+                <p>Our expert tailors get to work with precision and care.</p>
+            </div>
+            <div class="step">
+                <div class="step-num">4</div>
+                <h3>Perfect Fit</h3>
+                <p>Pick up your garment and enjoy the perfect fit. Adjustments if needed!</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <h2>Visit Us Today</h2>
+        <p>Walk-ins welcome. Call to ask about turnaround times and pricing.</p>
+        <div class="contact-info">
+            <div class="contact-item">
+                <div class="label">Phone</div>
+                <div class="value"><a href="tel:3235875499">(323) 587-5499</a></div>
+            </div>
+            <div class="contact-item">
+                <div class="label">Location</div>
+                <div class="value">Los Angeles, CA 90001</div>
+            </div>
+            <div class="contact-item">
+                <div class="label">Hours</div>
+                <div class="value">Mon–Sat: 9AM–6PM</div>
+            </div>
+        </div>
+        <div class="map-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d26609.474209498504!2d-118.26!3d33.94!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2c7b731571c03%3A0x4fcb297e4b8d4b0!2sLos%20Angeles%2C%20CA%2090001!5e0!3m2!1sen!2sus!4v1" allowfullscreen loading="lazy"></iframe>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Concepcion's Tailor Shop. All rights reserved. | Los Angeles, CA</p>
+    </footer>
+</body>
+</html>
