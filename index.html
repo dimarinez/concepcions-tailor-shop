@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Concepcion's Tailor Shop — Expert Alterations in Los Angeles</title>
     <meta name="description" content="Professional tailoring and alterations in Los Angeles 90001. Expert craftsmanship, affordable prices. Call (323) 587-5499.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --gold: #c9a84c;
@@ -16,159 +18,397 @@
             --cream: #faf8f2;
             --charcoal: #2c2c2c;
             --white: #ffffff;
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        *::selection { background: var(--gold); color: var(--navy); }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             color: var(--charcoal);
             background: var(--cream);
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
+
+        /* Grain overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0.025;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 256px;
+        }
+
+        /* Reveal animations */
+        .reveal {
+            opacity: 0;
+            -webkit-transform: translateY(40px);
+            -ms-transform: translateY(40px);
+            transform: translateY(40px);
+            -webkit-transition: opacity 0.8s var(--ease-out-expo), -webkit-transform 0.8s var(--ease-out-expo);
+            transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+        }
+        .reveal.revealed {
+            opacity: 1;
+            -webkit-transform: translateY(0);
+            -ms-transform: translateY(0);
+            transform: translateY(0);
+        }
+        .reveal-delay-1 { -webkit-transition-delay: 0.1s; transition-delay: 0.1s; }
+        .reveal-delay-2 { -webkit-transition-delay: 0.2s; transition-delay: 0.2s; }
+        .reveal-delay-3 { -webkit-transition-delay: 0.3s; transition-delay: 0.3s; }
+        .reveal-delay-4 { -webkit-transition-delay: 0.4s; transition-delay: 0.4s; }
+        .reveal-delay-5 { -webkit-transition-delay: 0.5s; transition-delay: 0.5s; }
 
         /* Navigation */
         nav {
             position: fixed; top: 0; width: 100%; z-index: 100;
-            background: rgba(26, 31, 58, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 2rem;
+            background: rgba(26, 31, 58, 0);
+            -webkit-backdrop-filter: blur(0px);
+            backdrop-filter: blur(0px);
+            padding: 1.5rem 3rem;
             display: flex; justify-content: space-between; align-items: center;
+            -webkit-transition: all 0.5s var(--ease-out-expo);
+            transition: all 0.5s var(--ease-out-expo);
+        }
+        nav.scrolled {
+            background: rgba(26, 31, 58, 0.95);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            padding: 1rem 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
         }
         .nav-brand {
             font-family: 'Playfair Display', serif;
             color: var(--gold);
             font-size: 1.3rem;
             font-weight: 700;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
         }
-        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links { display: flex; gap: 2.5rem; list-style: none; }
         .nav-links a {
             color: var(--cream);
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.82rem;
             font-weight: 400;
-            letter-spacing: 0.5px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            position: relative;
+            -webkit-transition: color 0.3s;
             transition: color 0.3s;
         }
-        .nav-links a:hover { color: var(--gold); }
-
-        .hamburger {
-            display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none;
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0; right: 0;
+            height: 1px;
+            background: var(--gold);
+            -webkit-transform: scaleX(0);
+            -ms-transform: scaleX(0);
+            transform: scaleX(0);
+            -webkit-transform-origin: right;
+            transform-origin: right;
+            -webkit-transition: -webkit-transform 0.4s var(--ease-out-expo);
+            transition: transform 0.4s var(--ease-out-expo);
         }
-        .hamburger span { width: 25px; height: 2px; background: var(--gold); transition: 0.3s; }
+        .nav-links a:hover { color: var(--gold); }
+        .nav-links a:hover::after {
+            -webkit-transform: scaleX(1);
+            -ms-transform: scaleX(1);
+            transform: scaleX(1);
+            -webkit-transform-origin: left;
+            transform-origin: left;
+        }
+        .hamburger {
+            display: none; flex-direction: column; gap: 6px; cursor: pointer; background: none; border: none; padding: 4px;
+        }
+        .hamburger span {
+            width: 28px; height: 1.5px; background: var(--gold);
+            -webkit-transition: 0.4s var(--ease-out-expo);
+            transition: 0.4s var(--ease-out-expo);
+            display: block;
+        }
 
         /* Hero */
         .hero {
             min-height: 100vh;
-            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
-            display: flex; align-items: center; justify-content: center;
+            min-height: 100dvh;
+            background: linear-gradient(160deg, var(--navy) 0%, #0f1225 60%, var(--navy-light) 100%);
+            display: -webkit-flex; display: flex;
+            -webkit-align-items: center; align-items: center;
+            -webkit-justify-content: center; justify-content: center;
             text-align: center;
-            padding: 6rem 2rem 4rem;
+            padding: 8rem 2rem 6rem;
             position: relative;
             overflow: hidden;
         }
         .hero::before {
             content: '';
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            position: absolute; inset: 0;
             background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
             opacity: 0.5;
         }
-        .hero-content { position: relative; z-index: 1; max-width: 700px; }
+        /* Floating orbs */
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 600px; height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+            top: -200px; right: -200px;
+            -webkit-animation: float 8s ease-in-out infinite;
+            animation: float 8s ease-in-out infinite;
+        }
+        .hero-orb {
+            position: absolute;
+            width: 400px; height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(201,168,76,0.05) 0%, transparent 70%);
+            bottom: -100px; left: -100px;
+            -webkit-animation: float 10s ease-in-out infinite reverse;
+            animation: float 10s ease-in-out infinite reverse;
+        }
+        @-webkit-keyframes float {
+            0%, 100% { -webkit-transform: translate(0, 0) scale(1); }
+            50% { -webkit-transform: translate(30px, -30px) scale(1.05); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, -30px) scale(1.05); }
+        }
+
+        .hero-content {
+            position: relative; z-index: 1; max-width: 750px;
+        }
         .hero-icon {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            display: inline-block;
+            -webkit-animation: gentle-spin 6s ease-in-out infinite;
+            animation: gentle-spin 6s ease-in-out infinite;
+        }
+        @-webkit-keyframes gentle-spin {
+            0%, 100% { -webkit-transform: rotate(0deg); }
+            25% { -webkit-transform: rotate(10deg); }
+            75% { -webkit-transform: rotate(-10deg); }
+        }
+        @keyframes gentle-spin {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(10deg); }
+            75% { transform: rotate(-10deg); }
         }
         .hero h1 {
             font-family: 'Playfair Display', serif;
             color: var(--white);
-            font-size: 3.5rem;
+            font-size: clamp(2.5rem, 5vw, 4rem);
             font-weight: 700;
-            line-height: 1.2;
+            line-height: 1.15;
             margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
         }
-        .hero h1 span { color: var(--gold); }
+        .hero h1 span {
+            color: var(--gold);
+            font-style: italic;
+        }
         .hero .tagline {
             color: var(--gold-light);
-            font-size: 1.1rem;
-            font-weight: 300;
-            letter-spacing: 3px;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 5px;
             text-transform: uppercase;
             margin-bottom: 1.5rem;
+            opacity: 0.8;
         }
         .hero p {
-            color: rgba(255,255,255,0.7);
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 2.5rem;
+            color: rgba(255,255,255,0.6);
+            font-size: 1.05rem;
+            line-height: 1.9;
+            margin-bottom: 3rem;
+            max-width: 550px;
+            margin-left: auto; margin-right: auto;
+        }
+        .hero-buttons {
+            display: -webkit-flex; display: flex;
+            gap: 1rem;
+            -webkit-justify-content: center; justify-content: center;
+            -webkit-flex-wrap: wrap; flex-wrap: wrap;
         }
         .btn {
             display: inline-block;
             padding: 1rem 2.5rem;
-            border-radius: 4px;
+            border-radius: 0;
             text-decoration: none;
             font-weight: 500;
-            font-size: 0.95rem;
-            letter-spacing: 1px;
-            transition: all 0.3s;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            -webkit-transition: all 0.4s var(--ease-out-expo);
+            transition: all 0.4s var(--ease-out-expo);
+        }
+        .btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            -webkit-transform: scaleX(0);
+            transform: scaleX(0);
+            -webkit-transform-origin: right;
+            transform-origin: right;
+            -webkit-transition: -webkit-transform 0.5s var(--ease-out-expo);
+            transition: transform 0.5s var(--ease-out-expo);
+            z-index: -1;
+        }
+        .btn:hover::before {
+            -webkit-transform: scaleX(1);
+            transform: scaleX(1);
+            -webkit-transform-origin: left;
+            transform-origin: left;
         }
         .btn-gold {
             background: var(--gold);
             color: var(--navy);
         }
-        .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); }
+        .btn-gold::before { background: var(--gold-light); }
+        .btn-gold:hover {
+            -webkit-transform: translateY(-3px);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(201,168,76,0.25);
+        }
         .btn-outline {
             border: 1.5px solid var(--gold);
             color: var(--gold);
-            margin-left: 1rem;
+            background: transparent;
         }
-        .btn-outline:hover { background: var(--gold); color: var(--navy); }
+        .btn-outline::before { background: var(--gold); }
+        .btn-outline:hover { color: var(--navy); }
+
+        /* Scrolling marquee */
+        .marquee {
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 1.25rem 0;
+            background: var(--gold);
+            color: var(--navy);
+            font-family: 'Playfair Display', serif;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        .marquee-inner {
+            display: inline-block;
+            -webkit-animation: marquee 30s linear infinite;
+            animation: marquee 30s linear infinite;
+        }
+        @-webkit-keyframes marquee {
+            0% { -webkit-transform: translateX(0); }
+            100% { -webkit-transform: translateX(-50%); }
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .marquee-inner span {
+            padding: 0 3rem;
+        }
 
         /* Section Styles */
-        section { padding: 5rem 2rem; }
+        section { padding: 7rem 2rem; }
         .section-header {
             text-align: center;
-            margin-bottom: 3.5rem;
+            margin-bottom: 4rem;
         }
         .section-header h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
             color: var(--navy);
             margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
         }
         .section-header p {
-            color: #666;
-            font-size: 1rem;
+            color: #888;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
         }
         .divider {
             width: 60px;
-            height: 3px;
+            height: 2px;
             background: var(--gold);
             margin: 1rem auto;
+            position: relative;
+        }
+        .divider::after {
+            content: '';
+            position: absolute;
+            width: 8px; height: 8px;
+            background: var(--gold);
+            border-radius: 50%;
+            top: -3px; left: 50%;
+            -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
         }
 
         /* Services */
         .services { background: var(--white); }
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
             max-width: 1100px;
             margin: 0 auto;
         }
         .service-card {
             background: var(--cream);
             padding: 2.5rem 2rem;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid rgba(201, 168, 76, 0.15);
-            transition: transform 0.3s, box-shadow 0.3s;
+            border-radius: 0;
+            text-align: left;
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+            -webkit-transition: all 0.5s var(--ease-out-expo);
+            transition: all 0.5s var(--ease-out-expo);
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 3px; height: 0;
+            background: var(--gold);
+            -webkit-transition: height 0.5s var(--ease-out-expo);
+            transition: height 0.5s var(--ease-out-expo);
         }
         .service-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(26, 31, 58, 0.08);
+            -webkit-transform: translateY(-8px);
+            transform: translateY(-8px);
+            box-shadow: 0 25px 60px rgba(26, 31, 58, 0.08);
+            border-color: rgba(201, 168, 76, 0.15);
         }
-        .service-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+        .service-card:hover::before { height: 100%; }
+        .service-icon {
+            font-size: 2.2rem;
+            margin-bottom: 1.25rem;
+            display: inline-block;
+            -webkit-transition: -webkit-transform 0.4s var(--ease-out-expo);
+            transition: transform 0.4s var(--ease-out-expo);
+        }
+        .service-card:hover .service-icon {
+            -webkit-transform: scale(1.15) rotate(-5deg);
+            transform: scale(1.15) rotate(-5deg);
+        }
         .service-card h3 {
             font-family: 'Playfair Display', serif;
             color: var(--navy);
@@ -176,163 +416,278 @@
             margin-bottom: 0.75rem;
         }
         .service-card p {
-            color: #666;
-            font-size: 0.9rem;
-            line-height: 1.6;
+            color: #777;
+            font-size: 0.88rem;
+            line-height: 1.7;
         }
         .service-price {
             display: inline-block;
-            margin-top: 1rem;
+            margin-top: 1.25rem;
             color: var(--gold);
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
         }
 
         /* Why Us */
         .why-us {
             background: var(--navy);
             color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+        .why-us::before {
+            content: '';
+            position: absolute;
+            width: 800px; height: 800px;
+            border-radius: 50%;
+            border: 1px solid rgba(201,168,76,0.05);
+            top: -400px; right: -400px;
         }
         .why-us .section-header h2 { color: var(--white); }
-        .why-us .section-header p { color: rgba(255,255,255,0.6); }
+        .why-us .section-header p { color: rgba(255,255,255,0.5); }
         .why-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 2rem;
             max-width: 1000px;
             margin: 0 auto;
         }
         .why-item {
             text-align: center;
-            padding: 2rem 1.5rem;
+            padding: 2.5rem 1.5rem;
+            border: 1px solid rgba(201,168,76,0.08);
+            -webkit-transition: all 0.4s var(--ease-out-expo);
+            transition: all 0.4s var(--ease-out-expo);
+        }
+        .why-item:hover {
+            border-color: rgba(201,168,76,0.2);
+            background: rgba(201,168,76,0.03);
         }
         .why-item .num {
             font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: var(--gold);
             font-weight: 700;
+            margin-bottom: 0.5rem;
         }
         .why-item h3 {
             margin: 0.75rem 0 0.5rem;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
         }
         .why-item p {
-            color: rgba(255,255,255,0.6);
-            font-size: 0.9rem;
-            line-height: 1.6;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.88rem;
+            line-height: 1.7;
         }
 
         /* Process */
+        #process { background: var(--cream); }
         .process-steps {
-            display: flex;
-            gap: 2rem;
+            display: -webkit-flex; display: flex;
+            gap: 0;
             max-width: 900px;
             margin: 0 auto;
-            flex-wrap: wrap;
-            justify-content: center;
+            -webkit-flex-wrap: wrap; flex-wrap: wrap;
+            -webkit-justify-content: center; justify-content: center;
         }
         .step {
-            flex: 1;
+            -webkit-flex: 1; flex: 1;
             min-width: 200px;
             text-align: center;
-            padding: 1.5rem;
+            padding: 2rem 1.5rem;
             position: relative;
         }
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 35px; right: 0;
+            width: 40%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            opacity: 0.3;
+        }
         .step-num {
-            width: 50px; height: 50px;
-            background: var(--gold);
-            color: var(--navy);
+            width: 56px; height: 56px;
+            background: transparent;
+            border: 2px solid var(--gold);
+            color: var(--gold);
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+            display: -webkit-flex; display: flex;
+            -webkit-align-items: center; align-items: center;
+            -webkit-justify-content: center; justify-content: center;
             font-family: 'Playfair Display', serif;
             font-size: 1.3rem;
             font-weight: 700;
-            margin: 0 auto 1rem;
+            margin: 0 auto 1.25rem;
+            -webkit-transition: all 0.4s var(--ease-out-expo);
+            transition: all 0.4s var(--ease-out-expo);
         }
-        .step h3 { color: var(--navy); font-size: 1rem; margin-bottom: 0.5rem; }
-        .step p { color: #666; font-size: 0.85rem; line-height: 1.5; }
+        .step:hover .step-num {
+            background: var(--gold);
+            color: var(--navy);
+            -webkit-transform: scale(1.1);
+            transform: scale(1.1);
+        }
+        .step h3 { color: var(--navy); font-size: 1rem; margin-bottom: 0.5rem; font-weight: 600; }
+        .step p { color: #888; font-size: 0.85rem; line-height: 1.6; }
 
-        /* Contact / CTA */
+        /* Contact */
         .contact {
-            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+            background: linear-gradient(160deg, var(--navy) 0%, #0f1225 100%);
             text-align: center;
             color: var(--white);
+            position: relative;
         }
         .contact h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
             margin-bottom: 1rem;
         }
         .contact p {
-            color: rgba(255,255,255,0.7);
-            margin-bottom: 2rem;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 2.5rem;
             font-size: 1rem;
         }
         .contact-info {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            flex-wrap: wrap;
-            margin-bottom: 2.5rem;
+            display: -webkit-flex; display: flex;
+            -webkit-justify-content: center; justify-content: center;
+            gap: 4rem;
+            -webkit-flex-wrap: wrap; flex-wrap: wrap;
+            margin-bottom: 3rem;
         }
-        .contact-item {
-            text-align: center;
-        }
+        .contact-item { text-align: center; }
         .contact-item .label {
             color: var(--gold);
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 0.3rem;
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
         }
         .contact-item .value {
             color: var(--white);
-            font-size: 1.1rem;
+            font-size: 1.15rem;
+            font-weight: 300;
         }
-        .contact-item a { color: var(--white); text-decoration: none; }
+        .contact-item a {
+            color: var(--white);
+            text-decoration: none;
+            -webkit-transition: color 0.3s;
+            transition: color 0.3s;
+        }
         .contact-item a:hover { color: var(--gold); }
 
         /* Map */
         .map-container {
             max-width: 800px;
             margin: 0 auto;
-            border-radius: 8px;
             overflow: hidden;
-            border: 2px solid rgba(201, 168, 76, 0.3);
+            border: 1px solid rgba(201, 168, 76, 0.15);
+            position: relative;
+        }
+        .map-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(201, 168, 76, 0.1);
+            z-index: 1;
+            pointer-events: none;
         }
         .map-container iframe {
             width: 100%;
-            height: 300px;
+            height: 350px;
             border: none;
+            display: block;
+            -webkit-filter: saturate(0.8) contrast(1.05);
+            filter: saturate(0.8) contrast(1.05);
         }
 
         /* Footer */
         footer {
-            background: #111;
-            color: rgba(255,255,255,0.5);
+            background: #0a0a0a;
+            color: rgba(255,255,255,0.35);
             text-align: center;
-            padding: 2rem;
-            font-size: 0.85rem;
+            padding: 3rem 2rem;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+        footer a { color: var(--gold); text-decoration: none; }
+
+        /* Smooth scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+            display: -webkit-flex; display: flex;
+            -webkit-flex-direction: column; flex-direction: column;
+            -webkit-align-items: center; align-items: center;
+            gap: 0.5rem;
+            color: rgba(255,255,255,0.3);
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        .scroll-indicator .line {
+            width: 1px; height: 40px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+            -webkit-animation: scroll-line 2s ease-in-out infinite;
+            animation: scroll-line 2s ease-in-out infinite;
+        }
+        @-webkit-keyframes scroll-line {
+            0% { opacity: 1; -webkit-transform: scaleY(1); }
+            50% { opacity: 0.3; -webkit-transform: scaleY(0.5); }
+            100% { opacity: 1; -webkit-transform: scaleY(1); }
+        }
+        @keyframes scroll-line {
+            0% { opacity: 1; transform: scaleY(1); }
+            50% { opacity: 0.3; transform: scaleY(0.5); }
+            100% { opacity: 1; transform: scaleY(1); }
         }
 
         /* Responsive */
         @media (max-width: 768px) {
+            nav { padding: 1rem 1.5rem; }
+            nav.scrolled { padding: 0.75rem 1.5rem; }
             .nav-links { display: none; }
-            .hamburger { display: flex; }
+            .hamburger { display: -webkit-flex; display: flex; }
             .nav-links.active {
-                display: flex;
-                flex-direction: column;
+                display: -webkit-flex; display: flex;
+                -webkit-flex-direction: column; flex-direction: column;
                 position: absolute;
                 top: 100%;
                 left: 0; right: 0;
-                background: var(--navy);
-                padding: 1.5rem 2rem;
-                gap: 1rem;
+                background: rgba(26,31,58,0.98);
+                -webkit-backdrop-filter: blur(20px);
+                backdrop-filter: blur(20px);
+                padding: 2rem;
+                gap: 1.5rem;
             }
-            .hero h1 { font-size: 2.4rem; }
-            .btn-outline { margin-left: 0; margin-top: 1rem; }
-            .hero .btn { display: block; width: 100%; text-align: center; }
-            .contact-info { gap: 1.5rem; }
+            .hero { padding: 7rem 1.5rem 5rem; }
+            .hero-buttons {
+                -webkit-flex-direction: column; flex-direction: column;
+                -webkit-align-items: stretch; align-items: stretch;
+            }
+            .btn { text-align: center; }
+            section { padding: 5rem 1.5rem; }
+            .contact-info { gap: 2rem; }
+            .step:not(:last-child)::after { display: none; }
+            .scroll-indicator { display: none; }
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                -webkit-animation-duration: 0.01ms !important;
+                animation-duration: 0.01ms !important;
+                -webkit-transition-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+            .reveal { opacity: 1; -webkit-transform: none; transform: none; }
+            html { scroll-behavior: auto; }
         }
     </style>
 </head>
@@ -345,61 +700,85 @@
             <li><a href="#process">How It Works</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
-        <button class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('active')" aria-label="Menu">
+        <button class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('active')" aria-label="Toggle menu">
             <span></span><span></span><span></span>
         </button>
     </nav>
 
     <section class="hero">
+        <div class="hero-orb"></div>
         <div class="hero-content">
-            <div class="hero-icon">✂️</div>
-            <p class="tagline">Expert Tailoring Since Day One</p>
-            <h1>Concepcion's <span>Tailor Shop</span></h1>
-            <p>Professional alterations and custom tailoring in the heart of Los Angeles. We bring precision, care, and decades of craftsmanship to every stitch.</p>
-            <a href="tel:3235875499" class="btn btn-gold">Call (323) 587-5499</a>
-            <a href="#services" class="btn btn-outline">View Services</a>
+            <div class="hero-icon reveal">&#9986;&#65039;</div>
+            <p class="tagline reveal reveal-delay-1">Expert Tailoring Since Day One</p>
+            <h1 class="reveal reveal-delay-2">Concepcion's <span>Tailor Shop</span></h1>
+            <p class="reveal reveal-delay-3">Professional alterations and custom tailoring in the heart of Los Angeles. We bring precision, care, and decades of craftsmanship to every stitch.</p>
+            <div class="hero-buttons reveal reveal-delay-4">
+                <a href="tel:3235875499" class="btn btn-gold">Call (323) 587-5499</a>
+                <a href="#services" class="btn btn-outline">View Services</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="line"></div>
         </div>
     </section>
 
+    <div class="marquee">
+        <div class="marquee-inner">
+            <span>Expert Alterations</span><span>&#10022;</span>
+            <span>Custom Tailoring</span><span>&#10022;</span>
+            <span>Wedding & Formal</span><span>&#10022;</span>
+            <span>Same-Week Turnaround</span><span>&#10022;</span>
+            <span>Walk-Ins Welcome</span><span>&#10022;</span>
+            <span>Los Angeles 90001</span><span>&#10022;</span>
+            <span>Expert Alterations</span><span>&#10022;</span>
+            <span>Custom Tailoring</span><span>&#10022;</span>
+            <span>Wedding & Formal</span><span>&#10022;</span>
+            <span>Same-Week Turnaround</span><span>&#10022;</span>
+            <span>Walk-Ins Welcome</span><span>&#10022;</span>
+            <span>Los Angeles 90001</span><span>&#10022;</span>
+        </div>
+    </div>
+
     <section class="services" id="services">
-        <div class="section-header">
+        <div class="section-header reveal">
             <h2>Our Services</h2>
             <div class="divider"></div>
             <p>Quality craftsmanship for every garment</p>
         </div>
         <div class="services-grid">
-            <div class="service-card">
-                <div class="service-icon">👔</div>
+            <div class="service-card reveal reveal-delay-1">
+                <div class="service-icon">&#128084;</div>
                 <h3>Suit Alterations</h3>
                 <p>Expert tailoring for jackets, pants, and complete suits. Get that perfect custom fit.</p>
                 <span class="service-price">Starting at $25</span>
             </div>
-            <div class="service-card">
-                <div class="service-icon">👗</div>
+            <div class="service-card reveal reveal-delay-2">
+                <div class="service-icon">&#128087;</div>
                 <h3>Dress Alterations</h3>
                 <p>Hemming, taking in, letting out, and restyling dresses for any occasion.</p>
                 <span class="service-price">Starting at $20</span>
             </div>
-            <div class="service-card">
-                <div class="service-icon">👖</div>
+            <div class="service-card reveal reveal-delay-3">
+                <div class="service-icon">&#128086;</div>
                 <h3>Pants & Jeans</h3>
                 <p>Hemming, tapering, waist adjustments, and zipper repairs for all types of pants.</p>
                 <span class="service-price">Starting at $12</span>
             </div>
-            <div class="service-card">
-                <div class="service-icon">🪡</div>
+            <div class="service-card reveal reveal-delay-1">
+                <div class="service-icon">&#129697;</div>
                 <h3>Repairs & Patches</h3>
                 <p>Torn seams, missing buttons, broken zippers — we'll make it like new again.</p>
                 <span class="service-price">Starting at $8</span>
             </div>
-            <div class="service-card">
-                <div class="service-icon">👰</div>
+            <div class="service-card reveal reveal-delay-2">
+                <div class="service-icon">&#128112;</div>
                 <h3>Wedding & Formal</h3>
                 <p>Bridal gowns, bridesmaid dresses, and formal wear altered with the utmost care.</p>
                 <span class="service-price">Starting at $50</span>
             </div>
-            <div class="service-card">
-                <div class="service-icon">📐</div>
+            <div class="service-card reveal reveal-delay-3">
+                <div class="service-icon">&#128208;</div>
                 <h3>Custom Fitting</h3>
                 <p>Full measurement and fitting sessions for a truly personalized garment experience.</p>
                 <span class="service-price">By consultation</span>
@@ -408,29 +787,29 @@
     </section>
 
     <section class="why-us" id="why-us">
-        <div class="section-header">
+        <div class="section-header reveal">
             <h2>Why Choose Concepcion's</h2>
             <div class="divider"></div>
             <p>Trusted by the community for quality and care</p>
         </div>
         <div class="why-grid">
-            <div class="why-item">
-                <div class="num">✦</div>
+            <div class="why-item reveal reveal-delay-1">
+                <div class="num">&#10022;</div>
                 <h3>Expert Craftsmanship</h3>
                 <p>Years of experience in fine tailoring and detailed alterations work.</p>
             </div>
-            <div class="why-item">
-                <div class="num">✦</div>
+            <div class="why-item reveal reveal-delay-2">
+                <div class="num">&#10022;</div>
                 <h3>Affordable Prices</h3>
                 <p>Quality tailoring at honest, competitive prices for every budget.</p>
             </div>
-            <div class="why-item">
-                <div class="num">✦</div>
+            <div class="why-item reveal reveal-delay-3">
+                <div class="num">&#10022;</div>
                 <h3>Quick Turnaround</h3>
-                <p>Most alterations completed within 3–5 business days. Rush service available.</p>
+                <p>Most alterations completed within 3-5 business days. Rush service available.</p>
             </div>
-            <div class="why-item">
-                <div class="num">✦</div>
+            <div class="why-item reveal reveal-delay-4">
+                <div class="num">&#10022;</div>
                 <h3>Satisfaction Guaranteed</h3>
                 <p>We don't stop until you're completely happy with the fit.</p>
             </div>
@@ -438,28 +817,28 @@
     </section>
 
     <section id="process">
-        <div class="section-header">
+        <div class="section-header reveal">
             <h2>How It Works</h2>
             <div class="divider"></div>
             <p>Simple, straightforward tailoring process</p>
         </div>
         <div class="process-steps">
-            <div class="step">
+            <div class="step reveal reveal-delay-1">
                 <div class="step-num">1</div>
                 <h3>Bring It In</h3>
                 <p>Walk in or call ahead with your garment and tell us what you need.</p>
             </div>
-            <div class="step">
+            <div class="step reveal reveal-delay-2">
                 <div class="step-num">2</div>
                 <h3>Get Measured</h3>
                 <p>We'll measure you and discuss the best approach for your alterations.</p>
             </div>
-            <div class="step">
+            <div class="step reveal reveal-delay-3">
                 <div class="step-num">3</div>
                 <h3>We Tailor</h3>
                 <p>Our expert tailors get to work with precision and care.</p>
             </div>
-            <div class="step">
+            <div class="step reveal reveal-delay-4">
                 <div class="step-num">4</div>
                 <h3>Perfect Fit</h3>
                 <p>Pick up your garment and enjoy the perfect fit. Adjustments if needed!</p>
@@ -468,9 +847,9 @@
     </section>
 
     <section class="contact" id="contact">
-        <h2>Visit Us Today</h2>
-        <p>Walk-ins welcome. Call to ask about turnaround times and pricing.</p>
-        <div class="contact-info">
+        <h2 class="reveal">Visit Us Today</h2>
+        <p class="reveal reveal-delay-1">Walk-ins welcome. Call to ask about turnaround times and pricing.</p>
+        <div class="contact-info reveal reveal-delay-2">
             <div class="contact-item">
                 <div class="label">Phone</div>
                 <div class="value"><a href="tel:3235875499">(323) 587-5499</a></div>
@@ -481,16 +860,57 @@
             </div>
             <div class="contact-item">
                 <div class="label">Hours</div>
-                <div class="value">Mon–Sat: 9AM–6PM</div>
+                <div class="value">Mon-Sat: 9AM-6PM</div>
             </div>
         </div>
-        <div class="map-container">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d26609.474209498504!2d-118.26!3d33.94!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2c7b731571c03%3A0x4fcb297e4b8d4b0!2sLos%20Angeles%2C%20CA%2090001!5e0!3m2!1sen!2sus!4v1" allowfullscreen loading="lazy"></iframe>
+        <div class="map-container reveal reveal-delay-3">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d26609.474209498504!2d-118.26!3d33.94!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2c7b731571c03%3A0x4fcb297e4b8d4b0!2sLos%20Angeles%2C%20CA%2090001!5e0!3m2!1sen!2sus!4v1" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
     </section>
 
     <footer>
         <p>&copy; 2026 Concepcion's Tailor Shop. All rights reserved. | Los Angeles, CA</p>
     </footer>
+
+    <script>
+        // Intersection Observer for reveal animations
+        (function() {
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+            document.querySelectorAll('.reveal').forEach(function(el) {
+                observer.observe(el);
+            });
+
+            // Nav scroll effect
+            var nav = document.querySelector('nav');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 80) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            }, { passive: true });
+
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+                anchor.addEventListener('click', function(e) {
+                    var target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        e.preventDefault();
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        // Close mobile menu
+                        var navLinks = document.getElementById('navLinks');
+                        if (navLinks) navLinks.classList.remove('active');
+                    }
+                });
+            });
+        })();
+    </script>
 </body>
 </html>
